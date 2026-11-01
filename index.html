@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LU IMPORT JUGUETERÍA - Catálogo Oficial Pro</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+        .font-brand { font-family: 'Fredoka', cursive; }
+
+        .perspective-card { perspective: 1000px; }
+        .card-3d {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+            transform-style: preserve-3d;
+        }
+        .card-3d:hover {
+            transform: translateY(-8px) rotateX(2deg) rotateY(-1deg);
+            box-shadow: 0 22px 40px -12px rgba(14, 165, 233, 0.25);
+        }
+
+        @keyframes pulse-subtle {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+        .animate-float-ws { animation: pulse-subtle 3s infinite ease-in-out; }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .grid-catalogo {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+            justify-content: center;
+            justify-items: center;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased pb-24 selection:bg-sky-500 selection:text-white">
+
+    <!-- Notificación Toast Flotante -->
+    <div id="toast" class="fixed top-20 right-4 z-50 transform translate-y-[-200%] opacity-0 transition-all duration-300 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border border-slate-700">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+        <div>
+            <h4 id="toast-title" class="font-bold text-xs uppercase tracking-wider text-slate-400">Notificación</h4>
+            <p id="toast-msg" class="text-sm font-medium"></p>
+        </div>
+    </div>
+
+    <!-- Header / Navbar -->
+    <header class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-40 border-b border-slate-200/80">
+        <div class="max-w-[1400px] mx-auto px-4 py-3 flex justify-between items-center">
+            
+            <div class="flex items-center gap-3">
+                <div class="bg-slate-50 border border-slate-200 p-1.5 rounded-2xl flex items-center justify-center shadow-sm">
+                    <img src="img/logo.jpg" alt="LU IMPORT JUGUETERÍA" class="h-9 w-auto object-contain" onError="this.src='https://via.placeholder.com/150x50?text=LU+IMPORT'">
+                </div>
+                <div class="border-l border-slate-200 pl-3">
+                    <h1 class="font-brand text-lg font-bold text-slate-800 leading-none">LU IMPORT</h1>
+                    <p class="text-[10px] text-emerald-600 font-extrabold tracking-widest uppercase mt-0.5">Juguetería Oficial</p>
+                </div>
+            </div>
+
+            <button onclick="toggleCarrito()" class="relative bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold px-5 py-2.5 rounded-2xl transition flex items-center gap-2.5 shadow-md shadow-amber-400/20 active:scale-95">
+                <i class="fa-solid fa-bag-shopping text-lg"></i>
+                <span class="hidden sm:inline text-sm">Mi Pedido</span>
+                <span id="badge-carrito" class="hidden bg-rose-500 text-white text-xs font-black w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Banner Principal -->
+    <section class="bg-gradient-to-r from-violet-600 via-indigo-600 to-sky-600 text-white py-14 px-4 shadow-2xl relative overflow-hidden">
+        <div class="absolute -right-10 -top-10 w-72 h-72 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute left-10 -bottom-10 w-60 h-60 bg-amber-400/20 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-[1400px] mx-auto flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
+            <div class="text-center md:text-left max-w-2xl">
+                <div class="inline-flex items-center gap-2 bg-amber-400 text-slate-900 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4 shadow-lg animate-pulse">
+                    <i class="fa-solid fa-fire text-rose-600"></i> ¡Los mejores juguetes al mejor precio!
+                </div>
+                
+                <h2 class="font-brand text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
+                    ¡Haz que su sonrisa <span class="text-amber-300 underline decoration-amber-400/50">sea inolvidable!</span> 🎁
+                </h2>
+                
+                <p class="text-indigo-100 text-sm md:text-base mt-3 font-normal leading-relaxed">
+                    Explora nuestro catálogo en tiempo real, arma tu pedido con stock verificado y recíbelo coordinando directo con nuestros asesores de ventas.
+                </p>
+
+                <div class="flex flex-wrap justify-center md:justify-start gap-4 mt-6 text-xs font-bold text-indigo-100">
+                    <span class="bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/15 flex items-center gap-1.5">
+                        <i class="fa-solid fa-box-open text-amber-300"></i> Stock en Vivo
+                    </span>
+                    <span class="bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/15 flex items-center gap-1.5">
+                        <i class="fa-solid fa-shield-halved text-emerald-400"></i> Compra 100% Segura
+                    </span>
+                    <span class="bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/15 flex items-center gap-1.5">
+                        <i class="fa-brands fa-whatsapp text-emerald-400"></i> Atención Inmediata
+                    </span>
+                </div>
+            </div>
+
+            <div class="flex flex-col items-center gap-3">
+                <button onclick="abrirWhatsAppGeneral()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-8 py-4 rounded-2xl shadow-2xl hover:shadow-emerald-500/40 transition transform hover:-translate-y-1 active:scale-95 flex items-center gap-3 text-sm uppercase tracking-wider whitespace-nowrap border-2 border-emerald-400/50">
+                    <i class="fa-brands fa-whatsapp text-2xl"></i> Asesoría Directa
+                </button>
+                <span class="text-[11px] text-indigo-200 font-medium">¡Te atendemos al instante al 940780092!</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contenedor Principal -->
+    <main id="catalogo" class="max-w-[1400px] mx-auto px-4 py-8">
+
+        <!-- Barra de Búsqueda y Filtros -->
+        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200/80 mb-8 space-y-5">
+            <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
+                <div class="relative flex-1 w-full">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-4 text-slate-400"></i>
+                    <input type="text" id="input-buscar" onkeyup="filtrarProductos()" placeholder="Buscar por nombre o código (ej: COD-21-153)..." class="w-full pl-11 pr-4 py-3 rounded-2xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500/50 transition text-sm font-medium">
+                </div>
+
+                <div class="w-full md:w-auto flex items-center gap-2">
+                    <span class="text-xs font-bold text-slate-400 uppercase whitespace-nowrap">Ordenar:</span>
+                    <select id="select-orden" onchange="ordenarProductos()" class="w-full md:w-48 bg-slate-50 border border-slate-200 text-slate-700 text-sm font-semibold rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-sky-500/50 cursor-pointer">
+                        <option value="defecto">Recomendados</option>
+                        <option value="precio-asc">Precio: Menor a Mayor</option>
+                        <option value="precio-desc">Precio: Mayor a Menor</option>
+                        <option value="nombre">Nombre (A - Z)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Navegación por Secciones -->
+            <section class="border-t border-slate-100 pt-5 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
+                    <div>
+                        <p class="text-[10px] font-black uppercase tracking-[.2em] text-slate-400">Catálogo por secciones</p>
+                        <h2 class="text-lg sm:text-xl font-black text-slate-900">¿Qué tipo de juguete buscas?</h2>
+                    </div>
+                    <p id="contador-catalogo" class="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-2 rounded-xl">Todos los productos</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="filtros-genero">
+                    <button type="button" data-genero="todos" onclick="filtrarPorGenero('todos')" class="btn-genero rounded-2xl px-4 py-4 font-extrabold text-sm bg-slate-900 text-white shadow-lg transition hover:-translate-y-0.5 flex items-center justify-center gap-3">
+                        <i class="fa-solid fa-border-all text-lg"></i><span>Todos los productos</span>
+                    </button>
+                    <button type="button" data-genero="ninos" onclick="filtrarPorGenero('ninos')" class="btn-genero rounded-2xl px-4 py-4 font-extrabold text-sm bg-sky-50 text-sky-800 border border-sky-100 transition hover:-translate-y-0.5 flex items-center justify-center gap-3">
+                        <i class="fa-solid fa-car-side text-xl"></i><span>Niños</span>
+                    </button>
+                    <button type="button" data-genero="ninas" onclick="filtrarPorGenero('ninas')" class="btn-genero rounded-2xl px-4 py-4 font-extrabold text-sm bg-pink-50 text-pink-800 border border-pink-100 transition hover:-translate-y-0.5 flex items-center justify-center gap-3">
+                        <i class="fa-solid fa-heart text-xl"></i><span>Niñas</span>
+                    </button>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <h3 class="text-[10px] font-black uppercase tracking-[.18em] text-slate-400">Subcategorías</h3>
+                        <span class="text-[10px] text-slate-400">Desliza para ver más</span>
+                    </div>
+                    <div id="filtros-subcategoria" class="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar"></div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Rejilla de Productos -->
+        <div id="contenedor-productos" class="grid-catalogo gap-5"></div>
+
+        <!-- Paginación -->
+        <div id="paginacion" class="mt-12 flex justify-center items-center gap-2"></div>
+
+    </main>
+
+    <!-- Modal Detalle del Producto -->
+    <div id="modal-detalle" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 transition-opacity">
+        <div class="bg-white w-full max-w-3xl rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row relative max-h-[90vh]">
+            <button onclick="cerrarDetalle()" class="absolute top-4 right-4 z-10 bg-slate-100 hover:bg-slate-200 text-slate-700 w-10 h-10 rounded-full flex items-center justify-center text-xl font-bold transition">&times;</button>
+            
+            <div class="md:w-1/2 bg-slate-50 p-6 flex flex-col justify-center items-center border-b md:border-b-0 md:border-r border-slate-200 min-h-[380px]">
+                <div class="w-full flex-1 flex flex-col justify-center items-center">
+                    <div class="relative w-full h-64 sm:h-72 flex items-center justify-center rounded-3xl overflow-hidden bg-white shadow-sm border border-slate-100 p-4">
+                        <img id="detalle-img-principal" src="" class="max-w-full max-h-full w-auto h-auto object-contain m-auto transition-all duration-300">
+                        <button onclick="cambiarFotoDetalle(-1)" class="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-2.5 rounded-full shadow-md text-slate-700 text-sm transition z-10"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button onclick="cambiarFotoDetalle(1)" class="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-2.5 rounded-full shadow-md text-slate-700 text-sm transition z-10"><i class="fa-solid fa-chevron-right"></i></button>
+                    </div>
+                </div>
+                <div id="detalle-miniaturas" class="flex gap-2.5 mt-4 overflow-x-auto py-1 w-full justify-center items-center shrink-0"></div>
+            </div>
+
+            <div class="md:w-1/2 p-7 flex flex-col justify-between overflow-y-auto">
+                <div>
+                    <div class="flex items-center gap-2 mb-3">
+                        <span id="detalle-categoria" class="bg-sky-50 text-sky-600 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider"></span>
+                        <span id="detalle-codigo" class="bg-slate-100 text-slate-600 text-xs font-mono font-bold px-2.5 py-1 rounded-lg"></span>
+                    </div>
+                    <h2 id="detalle-nombre" class="text-2xl font-bold text-slate-900 leading-tight"></h2>
+                    <p id="detalle-precio" class="text-2xl font-black text-sky-600 my-2"></p>
+                    <div id="detalle-stock-badge" class="mb-4"></div>
+                    <p id="detalle-descripcion" class="text-xs text-slate-600 leading-relaxed mb-5 font-normal whitespace-pre-line"></p>
+
+                    <div class="space-y-2 border-t border-slate-100 pt-4 text-xs text-slate-600">
+                        <p><strong>Edad recomendada:</strong> <span id="detalle-edad" class="text-slate-800 font-semibold">3+ años</span></p>
+                        <p><strong>Material:</strong> <span id="detalle-material" class="text-slate-800 font-semibold">Plástico resistente seguro</span></p>
+                        <p><strong>Dimensiones:</strong> <span id="detalle-dimensiones" class="text-slate-800 font-semibold">Estándar</span></p>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-4 border-t border-slate-100 flex flex-col gap-2.5">
+                    <button id="btn-detalle-agregar" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-sky-600/20 transition flex items-center justify-center gap-2 text-sm active:scale-95">
+                        <i class="fa-solid fa-cart-plus text-base"></i> Añadir al Pedido
+                    </button>
+                    <button id="btn-detalle-consultar" class="w-full border-2 border-emerald-500 text-emerald-600 hover:bg-emerald-50 font-bold py-3 rounded-2xl transition flex items-center justify-center gap-2 text-sm active:scale-95">
+                        <i class="fa-brands fa-whatsapp text-lg"></i> Consultar por WhatsApp
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón Flotante WhatsApp -->
+    <a href="javascript:void(0)" onclick="abrirWhatsAppGeneral()" class="fixed bottom-6 right-6 bg-emerald-500 hover:bg-emerald-600 text-white p-4.5 rounded-full shadow-2xl flex items-center justify-center z-50 animate-float-ws border-2 border-white active:scale-90 transition" title="Chatear por WhatsApp">
+        <i class="fa-brands fa-whatsapp text-3xl"></i>
+    </a>
+
+    <!-- Modal Carrito (Sin campos obligatorios de datos personales) -->
+    <div id="modal-carrito" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 hidden transition-opacity">
+        <div class="absolute right-0 top-0 bg-white w-full max-w-md h-full shadow-2xl flex flex-col">
+            <div class="bg-sky-600 text-white p-5 flex justify-between items-center">
+                <div class="flex items-center gap-2.5">
+                    <i class="fa-solid fa-bag-shopping text-xl text-amber-300"></i>
+                    <h2 class="font-bold text-lg">Tu Carrito de Pedido</h2>
+                </div>
+                <button onclick="toggleCarrito()" class="text-white/80 hover:text-white text-2xl font-bold">&times;</button>
+            </div>
+
+            <div id="lista-carrito" class="flex-1 overflow-y-auto p-5 space-y-3"></div>
+
+            <div class="border-t border-slate-200 p-5 bg-white space-y-3.5 shadow-lg">
+                <div class="flex justify-between items-center text-base font-bold text-slate-800">
+                    <span>Total estimado:</span>
+                    <span id="total-carrito" class="text-sky-600 text-2xl font-black">S/. 0.00</span>
+                </div>
+                <button onclick="enviarPedidoWhatsApp()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2.5 shadow-xl shadow-emerald-500/25 transition active:scale-95 text-sm uppercase tracking-wider">
+                    <i class="fa-brands fa-whatsapp text-2xl"></i> Enviar Pedido por WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+<script>
+        // CONFIGURACIÓN DE NÚMERO ÚNICO DE WHATSAPP
+        const NUMERO_WHATSAPP_UNICO = "51940780092";
+
+        const productos = [
+            {
+                id: 1,
+                codigo: "COD-21-111",
+                nombre: "Carro Policía con Sirena",
+                categoria: "vehiculos",
+                precio: 16.00,
+                stock: 30,
+                imagenes: ["img/Niños/COD-21-111/COD-21-111.jpg"],
+                descripcion: "• Réplica de un coche policía con sirena.\n• Tamaño perfecto para jugar en interiores y exteriores.\n• Requiere pilas.",
+                edad: "3+ años",
+                material: "Plástico ABS",
+                dimensiones: "10 x 28 cm"
+            },
+            {
+                id: 2,
+                codigo: "COD-21-153",
+                nombre: "Carro Deportivo Control Remoto",
+                categoria: "vehiculos",
+                precio: 17.00,
+                stock: 30,
+                imagenes: [
+                    "img/Niños/COD-21-153/COD-21-153.jpg",
+                    "img/Niños/COD-21-153/accesorios.png",
+                    "img/Niños/COD-21-153/lateral.png"
+                ],
+                descripcion: "• Carro deportivo con control remoto.\n• Diseño moderno y aerodinámico.\n• Función de avance y dirección.\n• Ideal para juegos de carreras.",
+                edad: "4+ años",
+                material: "Plástico resistente",
+                dimensiones: "20 x 8.5 x 5.5 cm"
+            },
+            {
+                id: 3,
+                codigo: "COD-503-135",
+                nombre: "Vehículo Deportivo con Volante",
+                categoria: "vehiculos",
+                precio: 55.00,
+                stock: 30,
+                imagenes: ["img/Niños/COD-503-135/PRINCIPAL.jpg"],
+                descripcion: "• Vehículo deportivo con control remoto.\n• Incluye volante y pedal.\n• Diseño realista de automóvil.\n• Ideal para juegos de conducción.",
+                edad: "5+ años",
+                material: "Plástico ABS reforzado",
+                dimensiones: "Estándar"
+            },
+            {
+                id: 4,
+                codigo: "COD-506-134",
+                nombre: "Carro Deportivo con Guante RC",
+                categoria: "vehiculos",
+                precio: 73.00,
+                stock: 30,
+                imagenes: ["img/Niños/COD-506-134/PRINCIPAL.jpg"],
+                descripcion: "• Carro deportivo a control remoto.\n• Incluye guante de control.\n• Diseño moderno y llamativo.\n• Ideal para juegos de velocidad y maniobras.",
+                edad: "6+ años",
+                material: "Plástico de alta calidad",
+                dimensiones: "Estándar"
+            },
+            {
+                id: 5,
+                codigo: "COD-521-97",
+                nombre: "Vehículo Militar con Sonido",
+                categoria: "educativos",
+                precio: 17.00,
+                stock: 30,
+                imagenes: ["img/Niños/COD-521-97/PRINCIPAL.jpg"],
+                descripcion: "• Tiene luces y sonido.\n• Camina.\n• Lanza dardos.",
+                edad: "4+ años",
+                material: "Plástico técnico",
+                dimensiones: "Estándar"
+            },
+            {
+                id: 6,
+                codigo: "COD-521-123",
+                nombre: "Juguete Didáctico Interactivo",
+                categoria: "educativos",
+                precio: 17.00,
+                stock: 30,
+                imagenes: ["img/Niños/COD-521-123/PRINCIPAL.jpg"],
+                descripcion: "• Funciona con pilas.\n• Tiene luces.\n• Emite sonidos.",
+                edad: "3+ años",
+                material: "Plástico seguro",
+                dimensiones: "Estándar"
+            },
+            {
+                id: 7,
+                codigo: "COD-523-149",
+                nombre: "Carro Deportivo Tipo Fórmula",
+                categoria: "vehiculos",
+                precio: 37.00,
+                stock: 30,
+                imagenes: ["img/Niños/COD-523-149/PRINCIPAL.jpg"],
+                descripcion: "• Carro deportivo tipo fórmula.\n• Control remoto inalámbrico.\n• Diseño deportivo y aerodinámico.\n• Fácil de manejar.\n• Ideal para juegos de carreras.",
+                edad: "5+ años",
+                material: "Plástico ABS",
+                dimensiones: "Estándar"
+            },
+            {
+                id: 8,
+                codigo: "COD-531-113",
+                nombre: "Patrulla Policial Giratoria",
+                categoria: "vehiculos",
+                precio: 19.00,
+                stock: 30,
+                imagenes: ["img/Niños/COD-531-113/COD-531-113 PRINCIPAL.jpg"],
+                descripcion: "• Emite sonido y luces.\n• Se desplaza.\n• Funciona con pilas.\n• Es giratorio.\n• Presentación en caja.",
+                edad: "3+ años",
+                material: "Plástico durable",
+                dimensiones: "Estándar"
+            },
+            {
+                id: 9,
+                codigo: "COD-531-117",
+                nombre: "Vehículo Policial con Movimiento",
+                categoria: "vehiculos",
+                precio: 19.00,
+                stock: 30,
+                imagenes: ["img/Niños/COD-531-117/PRINCIPAL.jpg"],
+                descripcion: "• Tiene luces y sonido.\n• Funciona con pilas.\n• Avanza y es giratorio.",
+                edad: "4+ años",
+                material: "Plástico resistente",
+                dimensiones: "Estándar"
+            },
+            {
+                id: 11,
+                codigo: "COD-561-154",
+                nombre: "Pista de Dinosaurios con Vehículo",
+                categoria: "mesa",
+                precio: 21.00,
+                stock: 30,
+                imagenes: [
+                    "img/Niños/COD-561-154/COD-561-154.jpg",
+                    "img/Niños/COD-561-154/COD-561-154-2.jpg",
+                    "img/Niños/COD-561-154/COD-561-154-3.jpg"
+                ],
+                descripcion: "• Pista de dinosaurios con vehículo.\n• Diseño temático de dinosaurio.\n• Incluye recorrido en espiral.\n• Ideal para juegos infantiles.",
+                edad: "4+ años",
+                material: "Plástico seguro no tóxico",
+                dimensiones: "Estándar"
+            },
+            {
+                id: 12,
+                codigo: "COD-561-142",
+                nombre: "Camión Mezclador de Construcción",
+                categoria: "vehiculos",
+                precio: 21.00,
+                stock: 30,
+                imagenes: ["img/Niños/COD-561-142/561-142.jpg"],
+                descripcion: "• Camión mezclador de construcción.\n• Control remoto para avanzar y retroceder.\n• Diseño realista y resistente.\n• Funciones móviles para mayor diversión.",
+                edad: "No especificada",
+                material: "No especificado",
+                dimensiones: "No especificadas"
+            },
+            {
+                id: 13,
+                codigo: "COD-70-152",
+                nombre: "Set de 4 Vehículos de Construcción",
+                categoria: "vehiculos",
+                precio: 11.00,
+                stock: 30,
+                imagenes: ["img/Niños/COD-70-152/70-152.jpg"],
+                descripcion: "• Incluye 4 vehículos: excavadora, cargador, camión y bulldozer.\n• Diseños realistas.\n• Ideal para juegos de construcción.",
+                edad: "No especificada",
+                material: "No especificado",
+                dimensiones: "No especificadas"
+            },
+            {
+                id: 14,
+                codigo: "COD-80-176",
+                nombre: "Camión de Construcción Dinosaurio",
+                categoria: "vehiculos",
+                precio: 12.50,
+                stock: 30,
+                imagenes: ["img/Niños/COD-80-176/80-176.jpg"],
+                descripcion: "• Diseño de camión de construcción.\n• Diseño temático de dinosaurio.\n• Cargador frontal móvil.",
+                edad: "No especificada",
+                material: "No especificado",
+                dimensiones: "No especificadas"
+            },
+            {
+                id: 15,
+                codigo: "COD-02-105",
+                nombre: "Carro Loco Giratorio",
+                categoria: "vehiculos",
+                precio: 25.00,
+                stock: 30,
+                imagenes: ["img/Niños/COD-02-105/02-105.jpg"],
+                descripcion: "• Gira 360 grados.\n• Funciona con pilas.\n• Tiene luces y sonido.",
+                edad: "No especificada",
+                material: "No especificado",
+                dimensiones: "No especificadas"
+            },
+            {
+                id: 16,
+                codigo: "COD-501-110",
+                nombre: "Colección de Carros Transformers",
+                categoria: "vehiculos",
+                precio: null,
+                stock: 30,
+                imagenes: ["img/Niños/COD-501-110/501-110.jpg"],
+                descripcion: "• Incluye 4 vehículos de diferentes colores.\n• Cada vehículo se transforma en robot.",
+                edad: "No especificada",
+                material: "No especificado",
+                dimensiones: "No especificadas"
+            },
+            {
+                id: 17,
+                codigo: "COD-501-127",
+                nombre: "Set de Carros Militares",
+                categoria: "vehiculos",
+                precio: 18.00,
+                stock: 30,
+                imagenes: ["img/Niños/COD-501-127/501-127.jpg"],
+                descripcion: "• Incluye accesorios militares y más de 5 vehículos.",
+                edad: "No especificada",
+                material: "No especificado",
+                dimensiones: "No especificadas"
+            },
+            {
+                id: 18,
+                codigo: "COD-109",
+                nombre: "Set de 20 Carros Deportivos",
+                categoria: "vehiculos",
+                precio: 15.00,
+                stock: 30,
+                imagenes: ["img/Niños/COD-109/109.jpg"],
+                descripcion: "• Incluye 20 carros deportivos y de carrera.",
+                edad: "No especificada",
+                material: "No especificado",
+                dimensiones: "34 x 21 cm"
+            },
+            {
+                id: 78,
+                codigo: "COD-02-07",
+                nombre: "MI CIELO",
+                categoria: "ninas",
+                genero: "ninas",
+                subcategoria: "Muñecas y bebés",
+                precio: 23.00,
+                stock: 30,
+                imagenes: ["img/Niñas/COD-02-07/02-07.jpg"],
+                descripcion: "Medidas: 27x51 cm | Incluye chupón | Es musical.",
+                edad: "No especificada",
+                material: "No especificado",
+                dimensiones: "No especificadas"
+            },
+            {
+                id: 79,
+                codigo: "COD-72-70",
+                nombre: "PAMELITA",
+                categoria: "ninas",
+                genero: "ninas",
+                subcategoria: "Muñecas y bebés",
+                precio: 32.00,
+                stock: 30,
+                imagenes: ["img/Niñas/COD-72-70/72-70.jpg"],
+                descripcion: "Viene en colores surtidos de vestido | Es musical | Grande, no tóxico.",
+                edad: "No especificada",
+                material: "No especificado",
+                dimensiones: "No especificadas"
+            },
+            {
+                id: 80,
+                codigo: "COD-82-61",
+                nombre: "MI TIERNO BEBÉ",
+                categoria: "ninas",
+                genero: "ninas",
+                subcategoria: "Muñecas y bebés",
+                precio: 33.00,
+                stock: 30,
+                imagenes: ["img/Niñas/COD-82-61/82-61.jpg"],
+                descripcion: "Es musical, canta \"La abejita chiquitita\" | Incluye chupón.",
+                edad: "No especificada",
+                material: "No especificado",
+                dimensiones: "No especificadas"
+            },
+            {
+                id: 81,
+                codigo: "COD-82-62",
+                nombre: "LUNITA DULCE SUEÑOS",
+                categoria: "ninas",
+                genero: "ninas",
+                subcategoria: "Muñecas y bebés",
+                precio: 34.00,
+                stock: 30,
+                imagenes: ["img/Niñas/COD-82-62/82-62.jpg"],
+                descripcion: "Musical | Incluye chupón y biberón con luces.",
+                edad: "No especificada",
+                material: "No especificado",
+                dimensiones: "No especificadas"
+            },
+            {
+                id: 99,
+                codigo: "COD-523-166",
+                nombre: "CARRO DE BARBIE CON KEN R/C",
+                categoria: "ninas",
+                genero: "ninas",
+                subcategoria: "Vehículos y casitas",
+                precio: 52.00,
+                stock: 30,
+                imagenes: ["img/Niñas/COD-523-166/523-166.jpg"],
+                descripcion: "Carro rosa con diseño de Barbie | Incluye muñeca Barbie y Ken | Control remoto.",
+                edad: "No especificada",
+                material: "No especificado",
+                dimensiones: "No especificadas"
+            },
+            {
+                id: 102,
+                codigo: "COD-5501-53",
+                nombre: "CASA DE BARBIE (MY FIRST DOLL HOUSE)",
+                categoria: "ninas",
+                genero: "ninas",
+                subcategoria: "Vehículos y casitas",
+                precio: 119.00,
+                stock: 30,
+                imagenes: ["img/Niñas/COD-5501-53/5501-53.jpg"],
+                descripcion: "Incluye 2 muñecos (Barbie y Ken) y accesorios. Mide 52x80 cm.",
+                edad: "No especificada",
+                material: "No especificado",
+                dimensiones: "No especificadas"
+            }
+        ];
+
+        function obtenerSubcategoriaNino(p) {
+            const n = (p.nombre || "").toLowerCase();
+            if (/burbuj/.test(n)) return "Burbujeros";
+            if (/dino|dinosaur/.test(n)) return "Dinosaurios";
+            if (/pista|bingo/.test(n)) return /bingo/.test(n) ? "Juegos de mesa" : "Pistas y carreras";
+            if (/avión|avion|helicóptero|helicoptero/.test(n)) return "Aviones y helicópteros";
+            if (/pistola|lanza|ametralladora|dardos|bota agua|arco de flechas/.test(n)) return "Pistolas y lanzadores";
+            if (/robot/.test(n)) return "Robots";
+            if (/guitarra|piano|tambor|gallina pintadita|león bailarín/.test(n)) return "Música y juguetes interactivos";
+            if (/doctor|dentista|herramienta|casco/.test(n)) return "Juegos de roles y herramientas";
+            if (/pelota|fútbol|futbol|portería|scooter|raqueta/.test(n)) return "Deportes y movilidad";
+            if (/laptop|proyector|alcancía|alcancia|plastilina|bloques/.test(n)) return "Didácticos y aprendizaje";
+            if (/carro|camión|camion|vehículo|vehiculo|patrulla/.test(n)) return "Carros y vehículos";
+            if (p.categoria === "mesa") return "Juegos de mesa";
+            if (p.categoria === "educativos") return "Didácticos y aprendizaje";
+            return "Otros juguetes";
+        }
+
+        productos.forEach(p => {
+            if (!p.genero) p.genero = "ninos";
+            if (!p.subcategoria) p.subcategoria = obtenerSubcategoriaNino(p);
+        });
+
+        let generoActual = "todos";
+        let subcategoriaActual = "todos";
+        let productosFiltrados = [...productos];
+        let paginaActual = 1;
+        const productosPorPagina = 48;
+        
+        let carrito = [];
+        let productoSeleccionado = null;
+        let indiceImagenActual = 0;
+
+        function mostrarToast(titulo, mensaje, esError = false) {
+            const toast = document.getElementById("toast");
+            const icon = document.getElementById("toast-icon");
+            document.getElementById("toast-title").textContent = titulo;
+            document.getElementById("toast-msg").textContent = mensaje;
+            icon.className = esError ? "fa-solid fa-circle-exclamation text-rose-400 text-lg" : "fa-solid fa-circle-check text-emerald-400 text-lg";
+            toast.classList.remove("translate-y-[-200%]", "opacity-0");
+            setTimeout(() => { toast.classList.add("translate-y-[-200%]", "opacity-0"); }, 3000);
+        }
+
+        function renderizarPagina() {
+            const inicio = (paginaActual - 1) * productosPorPagina;
+            const fin = inicio + productosPorPagina;
+            cargarProductos(productosFiltrados.slice(inicio, fin));
+            renderizarPaginacion();
+        }
+
+        function cargarProductos(lista) {
+            const contenedor = document.getElementById("contenedor-productos");
+            contenedor.innerHTML = "";
+
+            if (lista.length === 0) {
+                contenedor.innerHTML = `<div class="col-span-full text-center py-16 text-slate-400 font-medium"><i class="fa-solid fa-box-open text-4xl mb-2 opacity-40 block"></i>No hay juguetes disponibles con estos criterios.</div>`;
+                return;
+            }
+
+            lista.forEach(p => {
+                const fotoPrincipal = p.imagenes[0];
+                const estaAgotado = p.stock <= 0;
+                const sinPrecio = p.precio === null || p.precio === undefined || !Number.isFinite(Number(p.precio));
+
+                contenedor.innerHTML += `
+                    <div class="perspective-card w-full max-w-[240px]">
+                        <div class="bg-white rounded-3xl shadow-sm border border-slate-200/80 overflow-hidden flex flex-col card-3d group cursor-pointer h-full ${estaAgotado ? 'opacity-75 grayscale-[15%]' : ''}" onclick="abrirDetalle(${p.id})">
+                            <div class="relative overflow-hidden h-48 bg-slate-100 flex items-center justify-center p-2">
+                                <img src="${fotoPrincipal}" alt="${p.nombre}" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/400x300?text=Imagen+no+disponible'" class="max-w-full max-h-full object-contain group-hover:scale-105 transition duration-500">
+                                <span class="absolute top-2.5 left-2.5 bg-white/90 backdrop-blur-md text-[10px] font-extrabold text-sky-600 px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-sm truncate max-w-[120px]">${p.subcategoria || p.categoria}</span>
+                                <span class="absolute top-2.5 right-2.5 bg-slate-900/80 text-white text-[9px] font-mono font-bold px-2 py-0.5 rounded-lg shadow">${p.codigo}</span>
+                                
+                                <div class="absolute bottom-2.5 left-2.5">
+                                    ${estaAgotado ? 
+                                        `<span class="bg-rose-600 text-white text-[9px] font-extrabold px-2.5 py-1 rounded-lg uppercase tracking-wider shadow-md"><i class="fa-solid fa-circle-xmark mr-1"></i> Agotado</span>` : 
+                                        `<span class="bg-emerald-600/90 backdrop-blur-sm text-white text-[9px] font-bold px-2 py-1 rounded-lg shadow-md"><i class="fa-solid fa-boxes-stacked mr-1"></i> Stock: ${p.stock}</span>`
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="p-4 flex-1 flex flex-col justify-between">
+                                <div>
+                                    <div class="text-[10px] font-mono text-slate-400 font-bold mb-1">${p.codigo}</div>
+                                    <h3 class="font-bold text-slate-900 text-sm leading-snug group-hover:text-sky-600 transition line-clamp-2">${p.nombre}</h3>
+                                    <p class="text-[11px] text-slate-500 mt-1.5 leading-relaxed line-clamp-2">${p.descripcion}</p>
+                                </div>
+                                
+                                <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between" onclick="event.stopPropagation()">
+                                    <div>
+                                        <span class="text-[9px] text-slate-400 block font-bold uppercase tracking-wider">Precio</span>
+                                        <span class="text-sm sm:text-base font-black ${sinPrecio ? 'text-amber-600' : 'text-sky-600'}">${sinPrecio ? 'Consultar' : `S/. ${Number(p.precio).toFixed(2)}`}</span>
+                                    </div>
+                                    <div class="flex gap-1.5">
+                                        <button onclick="consultarIndividual('${p.codigo}', '${p.nombre.replace(/'/g, "\\'")}')" title="Consultar" class="p-2 rounded-xl border border-emerald-200 text-emerald-600 hover:bg-emerald-50 transition active:scale-95">
+                                            <i class="fa-brands fa-whatsapp text-base"></i>
+                                        </button>
+                                        ${estaAgotado ?
+                                            `<button onclick="consultarIndividual('${p.codigo}', '${p.nombre.replace(/'/g, "\\'")}')" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-2.5 py-2 rounded-xl text-[10px] transition flex items-center gap-1 shadow-sm"><i class="fa-brands fa-whatsapp"></i> Asesora</button>` :
+                                            sinPrecio ?
+                                            `<button onclick="consultarIndividual('${p.codigo}', '${p.nombre.replace(/'/g, "\\'")}')" class="bg-amber-500 hover:bg-amber-600 text-white font-bold px-2.5 py-2 rounded-xl text-[10px] transition"><i class="fa-brands fa-whatsapp mr-1"></i> Consultar</button>` :
+                                            `<button onclick="agregarAlCarrito(${p.id})" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold px-3 py-2 rounded-xl transition flex items-center gap-1 shadow-md shadow-sky-600/20 text-[10px] active:scale-95">
+                                                <i class="fa-solid fa-plus"></i> Añadir
+                                            </button>`
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function abrirDetalle(id) {
+            productoSeleccionado = productos.find(p => p.id === id);
+            if (!productoSeleccionado) return;
+
+            const estaAgotado = productoSeleccionado.stock <= 0;
+            indiceImagenActual = 0;
+
+            document.getElementById("detalle-nombre").textContent = productoSeleccionado.nombre;
+            document.getElementById("detalle-codigo").textContent = productoSeleccionado.codigo;
+            document.getElementById("detalle-categoria").textContent = productoSeleccionado.subcategoria || productoSeleccionado.categoria;
+            const sinPrecioDetalle = productoSeleccionado.precio === null || productoSeleccionado.precio === undefined || !Number.isFinite(Number(productoSeleccionado.precio));
+            document.getElementById("detalle-precio").textContent = sinPrecioDetalle ? "Consultar precio" : `S/. ${Number(productoSeleccionado.precio).toFixed(2)}`;
+            document.getElementById("detalle-descripcion").textContent = productoSeleccionado.descripcion;
+            document.getElementById("detalle-edad").textContent = productoSeleccionado.edad;
+            document.getElementById("detalle-material").textContent = productoSeleccionado.material;
+            document.getElementById("detalle-dimensiones").textContent = productoSeleccionado.dimensiones;
+
+            const badgeStock = document.getElementById("detalle-stock-badge");
+            if (estaAgotado) {
+                badgeStock.innerHTML = `<span class="bg-rose-100 text-rose-700 text-xs font-bold px-3 py-1.5 rounded-xl border border-rose-200 inline-block"><i class="fa-solid fa-circle-xmark mr-1.5"></i> Producto Agotado</span>`;
+            } else {
+                badgeStock.innerHTML = `<span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-3 py-1.5 rounded-xl border border-emerald-200 inline-block"><i class="fa-solid fa-check mr-1.5"></i> ${productoSeleccionado.stock} Unidades disponibles</span>`;
+            }
+
+            const btnAgregar = document.getElementById("btn-detalle-agregar");
+            if (estaAgotado || sinPrecioDetalle) {
+                btnAgregar.disabled = false;
+                btnAgregar.className = "w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-emerald-500/20 transition flex items-center justify-center gap-2 text-sm active:scale-95";
+                btnAgregar.innerHTML = `<i class="fa-brands fa-whatsapp text-lg"></i> Consultar por WhatsApp`;
+                btnAgregar.onclick = () => {
+                    consultarIndividual(productoSeleccionado.codigo, productoSeleccionado.nombre);
+                };
+            } else {
+                btnAgregar.disabled = false;
+                btnAgregar.className = "w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-sky-600/20 transition flex items-center justify-center gap-2 text-sm active:scale-95";
+                btnAgregar.innerHTML = `<i class="fa-solid fa-cart-plus text-base"></i> Añadir al Pedido`;
+                btnAgregar.onclick = () => {
+                    agregarAlCarrito(productoSeleccionado.id);
+                    cerrarDetalle();
+                    toggleCarrito();
+                };
+            }
+
+            document.getElementById("btn-detalle-consultar").onclick = () => {
+                consultarIndividual(productoSeleccionado.codigo, productoSeleccionado.nombre);
+            };
+
+            actualizarImagenDetalle();
+            renderizarMiniaturas();
+            document.getElementById("modal-detalle").classList.remove("hidden");
+        }
+
+        function cerrarDetalle() {
+            document.getElementById("modal-detalle").classList.add("hidden");
+        }
+
+        function actualizarImagenDetalle() {
+            const imgElement = document.getElementById("detalle-img-principal");
+            imgElement.src = productoSeleccionado.imagenes[indiceImagenActual];
+        }
+
+        function cambiarFotoDetalle(dir) {
+            const total = productoSeleccionado.imagenes.length;
+            indiceImagenActual = (indiceImagenActual + dir + total) % total;
+            actualizarImagenDetalle();
+            renderizarMiniaturas();
+        }
+
+        function renderizarMiniaturas() {
+            const cont = document.getElementById("detalle-miniaturas");
+            cont.innerHTML = "";
+            productoSeleccionado.imagenes.forEach((src, idx) => {
+                cont.innerHTML += `
+                    <img src="${src}" onclick="seleccionarFoto(${idx})" class="w-12 h-12 rounded-xl object-contain bg-white p-1 cursor-pointer border-2 transition ${idx === indiceImagenActual ? 'border-sky-600 scale-105 shadow-md' : 'border-slate-200 opacity-60 hover:opacity-100'}">
+                `;
+            });
+        }
+
+        function seleccionarFoto(idx) {
+            indiceImagenActual = idx;
+            actualizarImagenDetalle();
+            renderizarMiniaturas();
+        }
+
+        function filtrarPorGenero(genero) {
+            generoActual = genero;
+            subcategoriaActual = "todos";
+            paginaActual = 1;
+            document.querySelectorAll(".btn-genero").forEach(btn => {
+                const activo = btn.dataset.genero === genero;
+                const base = "btn-genero rounded-2xl px-4 py-4 font-extrabold text-sm transition hover:-translate-y-0.5 flex items-center justify-center gap-3";
+                if (btn.dataset.genero === "todos") {
+                    btn.className = base + (activo ? " bg-slate-900 text-white shadow-lg ring-2 ring-offset-2 ring-slate-300" : " bg-slate-100 text-slate-700 border border-slate-200");
+                } else if (btn.dataset.genero === "ninos") {
+                    btn.className = base + (activo ? " bg-sky-600 text-white shadow-lg ring-2 ring-offset-2 ring-sky-300" : " bg-sky-50 text-sky-800 border border-sky-100");
+                } else {
+                    btn.className = base + (activo ? " bg-pink-600 text-white shadow-lg ring-2 ring-offset-2 ring-pink-300" : " bg-pink-50 text-pink-800 border border-pink-100");
+                }
+            });
+            renderizarSubcategorias();
+            filtrarProductos();
+        }
+
+        function renderizarSubcategorias() {
+            const contenedor = document.getElementById("filtros-subcategoria");
+            if (!contenedor) return;
+            const visibles = productos.filter(p => generoActual === "todos" || p.genero === generoActual);
+            const categorias = [...new Set(visibles.map(p => p.subcategoria || "Otros juguetes"))].sort((a,b) => a.localeCompare(b, "es"));
+            contenedor.innerHTML = "";
+            ["todos", ...categorias].forEach(sub => {
+                const boton = document.createElement("button");
+                boton.type = "button";
+                boton.textContent = sub === "todos" ? "Todas las subcategorías" : sub;
+                boton.className = subcategoriaActual === sub
+                    ? "shrink-0 whitespace-nowrap rounded-xl px-4 py-2.5 text-xs font-extrabold bg-slate-900 text-white border border-slate-900 shadow-sm transition"
+                    : "shrink-0 whitespace-nowrap rounded-xl px-4 py-2.5 text-xs font-bold bg-white text-slate-600 border border-slate-200 hover:border-sky-300 hover:text-sky-700 transition";
+                boton.addEventListener("click", () => filtrarPorSubcategoria(sub));
+                contenedor.appendChild(boton);
+            });
+        }
+
+        function filtrarPorSubcategoria(subcategoria) {
+            subcategoriaActual = subcategoria;
+            paginaActual = 1;
+            renderizarSubcategorias();
+            filtrarProductos();
+        }
+
+        function ordenarProductos() {
+            const criterio = document.getElementById("select-orden").value;
+            if (criterio === "precio-asc") {
+                productosFiltrados.sort((a, b) => (a.precio ?? Number.POSITIVE_INFINITY) - (b.precio ?? Number.POSITIVE_INFINITY));
+            } else if (criterio === "precio-desc") {
+                productosFiltrados.sort((a, b) => (b.precio ?? -1) - (a.precio ?? -1));
+            } else if (criterio === "nombre") {
+                productosFiltrados.sort((a, b) => a.nombre.localeCompare(b.nombre));
+            } else {
+                productosFiltrados.sort((a, b) => a.id - b.id);
+            }
+            renderizarPagina();
+        }
+
+        function filtrarProductos() {
+            const texto = document.getElementById("input-buscar").value.trim().toLowerCase();
+            productosFiltrados = productos.filter(p => {
+                const coincideTexto = (p.nombre || "").toLowerCase().includes(texto)
+                    || (p.codigo || "").toLowerCase().includes(texto)
+                    || (p.descripcion || "").toLowerCase().includes(texto);
+                const coincideGenero = generoActual === "todos" || p.genero === generoActual;
+                const coincideSubcategoria = subcategoriaActual === "todos" || p.subcategoria === subcategoriaActual;
+                return coincideTexto && coincideGenero && coincideSubcategoria;
+            });
+            const titulo = generoActual === "todos" ? "Todos los productos" : generoActual === "ninos" ? "Catálogo de niños" : "Catálogo de niñas";
+            const contador = document.getElementById("contador-catalogo");
+            if (contador) contador.textContent = `${titulo} · ${productosFiltrados.length} productos`;
+            paginaActual = 1;
+            ordenarProductos();
+        }
+
+        function renderizarPaginacion() {
+            const total = Math.ceil(productosFiltrados.length / productosPorPagina);
+            const cont = document.getElementById("paginacion");
+            cont.innerHTML = "";
+            if (total <= 1) return;
+            for (let i = 1; i <= total; i++) {
+                const btn = document.createElement("button");
+                btn.textContent = i;
+                btn.className = `px-4 py-2 rounded-xl font-bold text-sm transition ${i === paginaActual ? 'bg-sky-600 text-white shadow-md' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'}`;
+                btn.onclick = () => { 
+                    paginaActual = i; 
+                    renderizarPagina(); 
+                    document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth' });
+                };
+                cont.appendChild(btn);
+            }
+        }
+
+        function agregarAlCarrito(id) {
+            const prod = productos.find(p => p.id === id);
+            if (prod.stock <= 0) {
+                mostrarToast("Agotado", "Lo sentimos, este producto no tiene stock.", true);
+                return;
+            }
+            if (prod.precio === null || prod.precio === undefined || !Number.isFinite(Number(prod.precio))) {
+                mostrarToast("Precio pendiente", "Consulta el precio por WhatsApp antes de añadir este producto.", true);
+                return;
+            }
+
+            const existe = carrito.find(p => p.id === id);
+            if (existe) {
+                if (existe.cantidad >= prod.stock) {
+                    mostrarToast("Límite de Stock", `Solo hay ${prod.stock} unidades disponibles.`, true);
+                    return;
+                }
+                existe.cantidad++;
+            } else {
+                carrito.push({ ...prod, cantidad: 1 });
+            }
+            
+            actualizarCarrito();
+            mostrarToast("¡Añadido!", `${prod.nombre} se agregó al pedido.`);
+        }
+
+        function cambiarCantidad(id, cambio) {
+            const item = carrito.find(p => p.id === id);
+            if (!item) return;
+
+            const prod = productos.find(p => p.id === id);
+            if (cambio > 0 && item.cantidad >= prod.stock) {
+                mostrarToast("Stock Máximo", `Solo disponemos de ${prod.stock} unidades.`, true);
+                return;
+            }
+
+            item.cantidad += cambio;
+            if (item.cantidad <= 0) carrito = carrito.filter(p => p.id !== id);
+            actualizarCarrito();
+        }
+
+        function actualizarCarrito() {
+            const lista = document.getElementById("lista-carrito");
+            const badge = document.getElementById("badge-carrito");
+            const totalElem = document.getElementById("total-carrito");
+            lista.innerHTML = "";
+            let total = 0, totalItems = 0;
+
+            if (carrito.length === 0) {
+                lista.innerHTML = `<div class="text-center py-16 text-slate-400"><i class="fa-solid fa-basket-shopping text-4xl mb-2 opacity-30 block"></i><p class="text-xs font-medium">Tu carrito está vacío.</p></div>`;
+                badge.classList.add("hidden");
+            } else {
+                carrito.forEach(item => {
+                    const sub = (Number(item.precio) || 0) * item.cantidad;
+                    total += sub;
+                    totalItems += item.cantidad;
+                    lista.innerHTML += `
+                        <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-200/80">
+                            <img src="${item.imagenes[0]}" class="w-12 h-12 rounded-xl object-contain bg-white p-0.5 border">
+                            <div class="flex-1 min-w-0">
+                                <span class="text-[10px] font-mono font-bold text-sky-600">${item.codigo}</span>
+                                <h4 class="font-bold text-slate-800 text-xs truncate">${item.nombre}</h4>
+                                <span class="text-sky-600 font-extrabold text-xs">S/. ${(Number(item.precio) || 0).toFixed(2)}</span>
+                            </div>
+                            <div class="flex items-center border border-slate-200 bg-white rounded-xl overflow-hidden shadow-sm">
+                                <button onclick="cambiarCantidad(${item.id}, -1)" class="px-2.5 py-1 text-slate-600 font-bold hover:bg-slate-100">-</button>
+                                <span class="px-2 text-xs font-bold">${item.cantidad}</span>
+                                <button onclick="cambiarCantidad(${item.id}, 1)" class="px-2.5 py-1 text-slate-600 font-bold hover:bg-slate-100">+</button>
+                            </div>
+                        </div>`;
+                });
+                badge.textContent = totalItems;
+                badge.classList.remove("hidden");
+            }
+            totalElem.textContent = `S/. ${total.toFixed(2)}`;
+        }
+
+        function toggleCarrito() {
+            document.getElementById("modal-carrito").classList.toggle("hidden");
+        }
+
+        function abrirWhatsAppGeneral() {
+            window.open(`https://wa.me/${NUMERO_WHATSAPP_UNICO}?text=${encodeURIComponent('¡Hola LU IMPORT! Quisiera información general sobre los productos y entregas.')}`, '_blank');
+        }
+
+        function consultarIndividual(codigo, nombre) {
+            window.open(`https://wa.me/${NUMERO_WHATSAPP_UNICO}?text=${encodeURIComponent(`¡Hola LU IMPORT! Deseo consultar disponibilidad del juguete *[${codigo}] ${nombre}*`)}`, '_blank');
+        }
+
+        function enviarPedidoWhatsApp() {
+            if (carrito.length === 0) {
+                mostrarToast("Carrito vacío", "Agrega juguetes antes de enviar.", true);
+                return;
+            }
+
+            let msg = `🛍️ *NUEVO PEDIDO - LU IMPORT JUGUETERÍA* 🛍️\n\n`;
+            msg += `----------------------------------\n`;
+            
+            let total = 0;
+            carrito.forEach(item => {
+                const sub = (Number(item.precio) || 0) * item.cantidad;
+                total += sub;
+                msg += `• *[${item.codigo}] ${item.nombre}* x${item.cantidad} = S/. ${sub.toFixed(2)}\n`;
+            });
+            
+            msg += `----------------------------------\n`;
+            msg += `💰 *MONTO TOTAL: S/. ${total.toFixed(2)}*\n\n`;
+            msg += `¡Hola! Me interesa este pedido, quedo a la espera para coordinar la entrega y el pago.`;
+
+            window.open(`https://wa.me/${NUMERO_WHATSAPP_UNICO}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        renderizarSubcategorias();
+        filtrarProductos();
+        actualizarCarrito();
+    </script>
+</body>
+</html>
